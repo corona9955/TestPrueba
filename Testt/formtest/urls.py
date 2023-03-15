@@ -21,7 +21,7 @@ from django.shortcuts import redirect
 
 urlpatterns=[
 
-    path('form/',views.formQuestion, name='form'),
+    path('form/<int:pk>/',views.formQuestion, name='form'),
     
     
 ]

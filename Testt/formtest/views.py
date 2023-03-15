@@ -31,10 +31,15 @@ from .forms import AnswerusrForm
 # |===============|      COMIENZAN VISTAS       |===============|
 # |=============================================================|
 
-def formQuestion(request):
+def formQuestion(request,pk):
     questiontest = []
-    data1_questiontest =  question.objects.all().filter(questionTestform=1)
+    data1_questiontest =  question.objects.all().filter(questionTestform=pk)
     data2_anwsertest = answer.objects.all().filter()
+
+    get_countQuestion = []
+    get_countQuestion = len(question.objects.all().filter(questionTestform=pk))
+
+    print(get_countQuestion)
 
     form1_answerToquestion = AnswerusrForm() 
     # |=============================================================|
@@ -44,45 +49,31 @@ def formQuestion(request):
         # |=============================================================|
         if form1_answerToquestion.is_valid():
             print('Sí soy válido1')
-
-            answerusrToquestion1 = request.POST['answerusrToquestion1']
-            answerusrQuestion1 = question.objects.get(id = request.POST['answerusrQuestion1'] )  
-
-            print(answerusrToquestion1)
-            print(answerusrQuestion1)
             # |=============================================================|
-            answerusr1= answerusr.objects.create(
-                answerusrToquestion = answerusrToquestion1,
-                answerusrQuestion = answerusrQuestion1,
-                answerusrMember = request.user
-              )
-            print('Ya leí datos1')
+            for nQuestion in range(1,get_countQuestion+1):
+                # |=============================================================|
+                answerusrToquestionx = "answerusrToquestion" + str(nQuestion)
+                answerusrQuestionx = "answerusrQuestion" + str(nQuestion)
+                answerusrx = "answerusrx" + str(nQuestion)
+                
+                answerusrToquestion = request.POST[answerusrToquestionx]
+                answerusrQuestion = question.objects.get(id = request.POST[answerusrQuestionx])  
 
-            answerusr1.save()
-            # |=============================================================|
-            answerusrToquestion2 = request.POST['answerusrToquestion2']
-            answerusrQuestion2 = question.objects.get(id = request.POST['answerusrQuestion2'] ) 
-
-            print(answerusrToquestion2)
-            print(answerusrQuestion2)
-            # |=============================================================|
-            answerusr2 = answerusr.objects.create(
-                answerusrToquestion = answerusrToquestion2,
-                answerusrQuestion = answerusrQuestion2,
-                answerusrMember = request.user
-              )
-            print('Ya leí datos2')
-
-            answerusr2.save()
-
+                # |=============================================================|
+                answerusrx = answerusr.objects.create(
+                    answerusrToquestion = answerusrToquestion,
+                    answerusrQuestion = answerusrQuestion,
+                    answerusrMember = request.user
+                )
+                print('Ya leí datos1')
+                answerusrx.save()
         else:
             print('Válio madres')
-
     print('valio quezo')
-
     context = {
     'questiontest':data1_questiontest,
     'anwsertest': data2_anwsertest,
+    'count_question': get_countQuestion,
     'form': form1_answerToquestion,
         }
     return render(request, 'formtest/form.html', context)

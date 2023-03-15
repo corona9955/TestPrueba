@@ -3,40 +3,19 @@
     <body>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <!-- {% for question in  questiontest %}
-            {% if question.id == 1%}
-            
-            {{question}}
-            <br>
-            {% for answer in  anwsertest %}
-                {% if answer.answerQuestion.id == question.id  %}
-                    <input type="radio" id="answerusrToquestion" name="answerusrToquestion" value="{{answer.id}}" required>   
-                    {{answer}}  
-                    <br>
-
-                {% endif %}
-
-            {% endfor %}           
-            <br>
-            <input type="text" style="visibility:hidden"  id="answerusrQuestion" name="answerusrQuestion" value="{{question.id}}" readonly hidden required>          
-            <input type="text" style="visibility:hidden"  id="answerusrQuestion1" name="answerusrQuestion1" value="{{question.id}}" readonly hidden required>   
-            {% endif%}
-            
-        {% endfor %}
-        
-        <button class="btn btn-primary" type="submit">Registrar avistamiento</button> -->
-
         <input type="radio" id="answerusrToquestion" name="answerusrToquestion" value="1" checked readonly hidden required>
 
         {% for question in  questiontest %}
+        {{forloop.counter}}
+
             {{question}}
             <br>
-            <input type="text" style="visibility:hidden"  id="answerusrQuestion{{question.id}}" name="answerusrQuestion{{question.id}}" value="{{question.id}}" readonly hidden required>          
+            <input type="text" style="visibility:hidden"  id="answerusrQuestion{{question.id}}" name="answerusrQuestion{{forloop.counter}}" value="{{question.id}}" readonly hidden required>          
 
             {% for answer in  anwsertest %}
                 {% if answer.answerQuestion.id == question.id  %}
-                    <input type="radio" id="answerusrToquestion{{question.id}}" name="answerusrToquestion{{question.id}}" value="{{answer.id}}" required>   
+
+                    <input type="radio" id="answerusrToquestion{{question.id}}" name="answerusrToquestion{{forloop.parentloop.counter}}" value="{{answer.id}}" required>   
                     {{answer}}  
                     <br>
                 {% endif %}
@@ -46,6 +25,5 @@
         <button class="btn btn-primary" type="submit">Registrar avistamiento</button>
 
     </form>
-
     </body>
 </html>
