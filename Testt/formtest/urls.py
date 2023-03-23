@@ -22,6 +22,7 @@ from django.shortcuts import redirect
 urlpatterns=[
 
     path('form/<int:pk>/',views.formQuestion, name='form'),
+    path('teachable/',views.teachableMachine, name='teachable'),
     
     
 ]

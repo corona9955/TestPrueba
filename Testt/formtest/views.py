@@ -8,6 +8,7 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 
+
 # |=========================================|
 # |=====|       BIBLIOTECAS BASE      |=====|
 # |=========================================|
@@ -77,3 +78,10 @@ def formQuestion(request,pk):
     'form': form1_answerToquestion,
         }
     return render(request, 'formtest/form.html', context)
+
+
+def teachableMachine(request):
+    context ={
+
+    }
+    return render(request, 'teachablemachine/teachable.html',context)

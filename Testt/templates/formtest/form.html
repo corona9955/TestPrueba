@@ -1,7 +1,29 @@
+{% load static %}
 <html>
-    <head><title></title></head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+        <title> FORMULARIO</title>
+
+
+       
+
+        <link rel="stylesheet" href={%static '/bootstrap/css/bootstrap1.min.css' %} />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src={%static '/bootstrap/js/bootstrap1.min.js' %}></script>
+        <script src={%static '/bootstrap/js/jquery1.min.js' %}></script>
+
+
+    
+    </head>
     <body>
-    <form method="POST" enctype="multipart/form-data">
+
+
+
+
+
+
+    <!-- <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="radio" id="answerusrToquestion" name="answerusrToquestion" value="1" checked readonly hidden required>
 
@@ -23,7 +45,80 @@
             <br>
         {% endfor %}
         <button class="btn btn-primary" type="submit">Registrar avistamiento</button>
+    </form> -->
 
-    </form>
+
+
+
+
+
+
+
+<!-- Botón para abrir la ventana modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Abrir formulario</button>
+
+<!-- Ventana modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Contenido de la ventana modal -->
+    <div class="modal-content" style="background-repeat:repeat-x;background-size:auto;background-image: url('{%static 'img/quest/background1.png' %}');">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <center>
+        <h4 class="modal-title">!Bzz bzzz, bienvenido!</h4>
+        <h5 class="modal-title">Nos gustaria saber qué tanto sabes sobre las abejas, ¡animate a responder esta encuesta!</h5>
+    </center>
+    </div>
+    <br><br><br><br><br><br><br><br><br>
+      <div class="modal-body">
+        <!-- Formulario -->
+
+
+
+        <form method="POST" enctype="multipart/form-data">
+
+
+          <div class="form-group">
+            {% csrf_token %}
+            <p align="left">
+            <input type="radio" id="answerusrToquestion" name="answerusrToquestion" value="1" checked readonly hidden required>
+    
+            {% for question in  questiontest %}
+            {{forloop.counter}}
+    
+            {{question}} 
+                <br>
+                <input type="text" style="visibility:hidden"  id="answerusrQuestion{{question.id}}" name="answerusrQuestion{{forloop.counter}}" value="{{question.id}}" readonly hidden required>          
+    
+                {% for answer in  anwsertest %}
+                    {% if answer.answerQuestion.id == question.id  %}
+    
+                        <input type="radio" id="answerusrToquestion{{question.id}}" name="answerusrToquestion{{forloop.parentloop.counter}}" value="{{answer.id}}" required>   
+                        {{answer}} 
+                        <br>
+                    </p> 
+                    {% endif %}
+                {% endfor %}           
+                <br>
+            {% endfor %}
+          </div>
+          <center>
+          <button class="btn btn-warning" type="submit">Registrar respuestas</button>
+        </center>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+
     </body>
 </html>

@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>Teachable Machine Image Model - p5.js and ml5.js</title>
+    </head>
+<body>
+  <div>Beecare</div>
+  <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.dom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js"></script>
+  <input type="text" id="beeName" name="beeName">
+
+  <input type="file" id="img-change" value="BeeCareLogo.png">
+  <img name="img1" id="img1" src="https://res.cloudinary.com/dwxkhmtb3/image/upload/v1678053861/Beecare/Sightings/sighting_alvarez%20juan%20c/sight._bmqpao.jpg" style="height: 320;width: 260;"  align="left" crossorigin="anonymous" >
+
+  <script type="text/javascript">
+  const inputImagen = document.getElementById("img-change");
+  const miImagen = document.getElementById("img1");
+
+  inputImagen.addEventListener("change", function() {
+    const archivo = inputImagen.files[0];
+    const lector = new FileReader();
+    lector.addEventListener("load", function() {
+      miImagen.src = lector.result;
+      classifyImage();
+    }, false);
+        // console.log(document.getElementById("img-change"))
+        // console.log(archivo)
+    if (archivo) {
+      lector.readAsDataURL(archivo);
+    }
+  });
+      // Classifier Variable
+      let classifier;
+      // Model URL
+      let imageModelURL = 'https://teachablemachine.withgoogle.com/models/LrT7jTXwS/';
+      // Imagen
+      let imagebee;
+      // Label de resultado
+      let label = "";
+      // Load the model first
+      function preload() {
+        classifier = ml5.imageClassifier(imageModelURL + 'model.json',{cors:true});
+        imagebee = document.getElementById("img1") ;
+        console.log(imagebee);
+      }
+      function setup() {
+        createCanvas(320, 260);
+    
+        // Empieza a clasificar
+        classifyImage();
+      }
+    
+      function draw() {
+        // Dibujo de imagen
+        if (imagebee.width = 0) {
+        image(imagebee);
+        }
+      }
+      // Se obtiene una predicción de la imagen
+      function classifyImage() {
+        classifier.classify(imagebee, gotResult);
+      }
+      // Se obtienen los resultados de la imagen
+      function gotResult(error, results) {
+        // En caso de error
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // Resultados, asignación de valor a textbox
+        label = results[0].label;
+        document.getElementById("beeName").value = label
+        console.log(label);
+        // Llamada nueva a clasificación de imagen en caso de ingresar una nueva  
+    }
+  </script>
+</body>
+</html>
