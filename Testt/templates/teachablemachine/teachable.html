@@ -23,26 +23,26 @@
       miImagen.src = lector.result;
       classifyImage();
     }, false);
-        // console.log(document.getElementById("img-change"))
-        // console.log(archivo)
     if (archivo) {
       lector.readAsDataURL(archivo);
     }
   });
       // Classifier Variable
       let classifier;
-      // Model URL
+      // Modelo URL
       let imageModelURL = 'https://teachablemachine.withgoogle.com/models/LrT7jTXwS/';
       // Imagen
       let imagebee;
       // Label de resultado
       let label = "";
-      // Load the model first
+      // Carga de modelo
       function preload() {
         classifier = ml5.imageClassifier(imageModelURL + 'model.json',{cors:true});
         imagebee = document.getElementById("img1") ;
         console.log(imagebee);
       }
+
+      // Creación de lienzo a analizar del modelo en dimensiones de 320 pixels vs 260 pixels
       function setup() {
         createCanvas(320, 260);
     
@@ -50,12 +50,6 @@
         classifyImage();
       }
     
-      function draw() {
-        // Dibujo de imagen
-        if (imagebee.width = 0) {
-        image(imagebee);
-        }
-      }
       // Se obtiene una predicción de la imagen
       function classifyImage() {
         classifier.classify(imagebee, gotResult);
@@ -70,8 +64,7 @@
         // Resultados, asignación de valor a textbox
         label = results[0].label;
         document.getElementById("beeName").value = label
-        console.log(label);
-        // Llamada nueva a clasificación de imagen en caso de ingresar una nueva  
+        console.log(label); 
     }
   </script>
 </body>
