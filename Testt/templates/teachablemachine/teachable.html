@@ -41,7 +41,6 @@
         imagebee = document.getElementById("img1") ;
         console.log(imagebee);
       }
-
       // Creación de lienzo a analizar del modelo en dimensiones de 320 pixels vs 260 pixels
       function setup() {
         createCanvas(320, 260);
@@ -49,7 +48,6 @@
         // Empieza a clasificar
         classifyImage();
       }
-    
       // Se obtiene una predicción de la imagen
       function classifyImage() {
         classifier.classify(imagebee, gotResult);
