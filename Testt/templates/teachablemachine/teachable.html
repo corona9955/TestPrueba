@@ -7,9 +7,16 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.dom.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js"></script>
-  <input type="text" id="beeName" name="beeName">
-  <label style="color: brown;"  id="isBeeOrNo" name="isBeeOrNo"></label>
+<!-- 4 -->
+  <input type="text" id="speciesBee" name="beeName">
+<!-- 1 -->
+  <label style="color: rgb(68, 23, 182);"  id="isInsectOrNo" name="isInsectOrNo"></label>
+<!-- 2 -->
+  <label style="color: brown;"  id="isBeeOrOtherInsect" name="isBeeOrOtherInsect"></label>
+<!-- 3 -->
   <label style="color: chocolate;"  id="stingBee" name="stingBee"></label>
+<!-- 5 -->
+  <label style="color: rgb(30, 201, 210);"  id="nativeBeeOrNo" name="nativeBeeOrNo"></label>
 
   <input type="file" id="img-change" value="BeeCareLogo.png">
   <img name="img1" id="img1" src="https://res.cloudinary.com/dwxkhmtb3/image/upload/v1680062470/apis_mel%C3%ADfera_qp7oms.jpg" style="height: 320;width: 260;"  align="left" crossorigin="anonymous" >
@@ -29,28 +36,50 @@
       lector.readAsDataURL(archivo);
     }
   });
-      // Classifier Variable
+      // Classifier Variable - clasificar si es un insecto o no lo es.
       let classifier1;
-      // Modelo URL
-      // URL de modelo Es o no es una abeja 
-      let imageModelURL1 = 'https://teachablemachine.withgoogle.com/models/ZQHGqR6VL/';
-      // URL de modelo Especies de abeja 
-      let imageModelURL2 = 'https://teachablemachine.withgoogle.com/models/LrT7jTXwS/';
-      // URL de modelo Tiene o no agujón
-      let imageModelURL3 = 'https://teachablemachine.withgoogle.com/models/AVu_m7GH_/';
-      // Imagen
+      // Classifier Variable - clasificar si es una abeja o otro insecto.
+      let classifier2;
+      // Classifier Variable - clasificar si tiene aguijón o no.
+      let classifier3;
+      // Classifier Variable - clasificar que especie de abeja.
+      let classifier4;
+      // Classifier Variable - clasificar si es nativa o no nativa.
+      let classifier5;
+      // --------------------Modelos URL-------------------
+      // URL de modelo - es un insecto o no lo es.
+      let imageModelURL1 = 'https://teachablemachine.withgoogle.com/models/wolNPOfls/';
+      // URL de modelo - si es una abeja o otro insecto.
+      let imageModelURL2 = 'https://teachablemachine.withgoogle.com/models/Pc3a6ok64/';
+      // URL de modelo - si tiene aguijón o no.
+      let imageModelURL3 = 'https://teachablemachine.withgoogle.com/models/0zwfXaUho/';
+      // URL de modelo - que especie de abeja.
+      let imageModelURL4 = 'https://teachablemachine.withgoogle.com/models/ipqyNOghn/';
+      // URL de modelo - si es nativa o no nativa.
+      let imageModelURL5 = 'https://teachablemachine.withgoogle.com/models/uwH9uprY4/';
+
+      // Imagen a cargada
       let imagebee;
-      // Label de resultado
+      // Labels de resultados
       let label1 = "";
       let label2 = "";
-      // Carga de modelo
+      let label3 = "";
+      let label4 = "";
+      let label5 = "";
+      // Carga de modelos
       function preload() {
-        // Clasificador de: Es o no es una abeja - modelo
+
+        // Clasificador de: es un insecto o no lo es - modelo
         classifier1 = ml5.imageClassifier(imageModelURL1 + 'model.json',{cors:true}); 
-        // Clasificador de: Especies de abeja - modelo
-        classifier2 = ml5.imageClassifier(imageModelURL2 + 'model.json',{cors:true});
-        // Clasificador de: Tiene o no agujón - modelo
+        // Clasificador de: si es una abeja o otro insecto. - modelo
+        classifier2 = ml5.imageClassifier(imageModelURL2 + 'model.json',{cors:true}); 
+        // Clasificador de: si tiene aguijón o no. - modelo
         classifier3 = ml5.imageClassifier(imageModelURL3 + 'model.json',{cors:true});
+        // Clasificador de: que especie de abeja. - modelo
+        classifier4 = ml5.imageClassifier(imageModelURL4 + 'model.json',{cors:true});
+        // Clasificador de: si es nativa o no nativa. - modelo
+        classifier5 = ml5.imageClassifier(imageModelURL5 + 'model.json',{cors:true});
+        // Creación de variable en base al elemento con id img1
         imagebee = document.getElementById("img1") ;
         console.log(imagebee);
       }
@@ -58,7 +87,7 @@
       function setup() {
         createCanvas(320, 260);
     
-        // Empieza a clasificar
+        // Empieza a clasificar si es un insecto
         classifyImage1();
       }
       // Se obtiene una predicción de la imagen
@@ -75,22 +104,27 @@
         // Resultados, asignación de valor a label
         label1 = results[0].label;
 
-        if( label1 == "Es una abeja"){
-          document.getElementById("isBeeOrNo").textContent = label1
-          console.log(label1); 
+        if( label1 == "Es un insecto"){
+          document.getElementById("isInsectOrNo").textContent = label1;
+          console.log("1-1-"+label1); 
+          // Comienza a clasificar si es una abeja o otro insecto
           classifyImage2();
         }
-        document.getElementById("beeName").value = "";
-        document.getElementById("isBeeOrNo").textContent = label1;
+        else if( label1 == "No es un insecto"){
+        document.getElementById("isInsectOrNo").textContent = label1;
+        document.getElementById("isBeeOrOtherInsect").textContent = "";
         document.getElementById("stingBee").textContent = "";
-        console.log(label1);
+        document.getElementById("speciesBee").value = "";
+        document.getElementById("nativeBeeOrNo").textContent = "";
+        console.log("1-2-"+label1);
+        }
+
     }
 
       // Se obtiene una predicción de la imagen
       function classifyImage2() {
         classifier2.classify(imagebee, gotResult2);
         }
-
       // Se obtienen los resultados de la imagen
       function gotResult2(error, results) {
         // En caso de error
@@ -98,13 +132,22 @@
           console.error(error);
           return;
         }
-        // Resultados, asignación de valor a textbox
+        // Resultados, asignación de valor a label
         label2 = results[0].label;
 
-        document.getElementById("beeName").value = label2
-        console.log(label2); 
-        classifyImage3();
-        
+        if(label2 == "Es una abeja"){
+          document.getElementById("isBeeOrOtherInsect").textContent = label2
+          console.log("2-1-"+label2);
+          // Comienza a clasificar si la abeja tiene aguijón o no lo tiene
+          classifyImage3();
+        } else if (label2 == "Es otro insecto"){
+          document.getElementById("isBeeOrOtherInsect").textContent = label2
+          document.getElementById("stingBee").textContent = "";
+          document.getElementById("speciesBee").value = "";
+          document.getElementById("nativeBeeOrNo").textContent = "";
+          console.log("2-2-"+label2);
+        }
+ 
     }
 
       // Se obtiene una predicción de la imagen
@@ -119,11 +162,53 @@
           console.error(error);
           return;
         }
-        // Resultados, asignación de valor a textbox
+        // Resultados, asignación de valor a label
         label3 = results[0].label;
 
         document.getElementById("stingBee").textContent = label3
-        console.log(label3);    
+        console.log(label3);
+        // Comienza a clasificar la especie de abeja    
+        classifyImage4()
+    }
+
+      // Se obtiene una predicción de la imagen
+      function classifyImage4() {
+        classifier4.classify(imagebee, gotResult4);
+        }
+      
+      // Se obtienen los resultados de la imagen
+      function gotResult4(error, results) {
+        // En caso de error
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // Resultados, asignación de valor a label
+        label4 = results[0].label;
+
+        document.getElementById("speciesBee").value = label4
+        console.log(label4);
+        // Comienza a clasificar si la abeja es nativa o no es nativa
+        classifyImage5()    
+    }
+
+      // Se obtiene una predicción de la imagen
+      function classifyImage5() {
+        classifier5.classify(imagebee, gotResult5);
+        }
+      
+      // Se obtienen los resultados de la imagen
+      function gotResult5(error, results) {
+        // En caso de error
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // Resultados, asignación de valor a label
+        label5 = results[0].label;
+
+        document.getElementById("nativeBeeOrNo").textContent = label5
+        console.log(label5);    
     }
   </script>
 </body>
